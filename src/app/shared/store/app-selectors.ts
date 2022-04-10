@@ -13,6 +13,12 @@ export const selectCurrentPage = createSelector(currentPageGetter, context => co
 
 export const selectAppTheme = createSelector(appThemeGetter, theme => theme);
 
+export const selectThemeColorsStyles = createSelector(appThemeGetter, theme => {
+    const fontName = theme?.font ? theme.font.replace(/[^a-zA-Z\-]/g, '-').toLowerCase() : 'default';
+    const colorLight = theme?.lightThemeOff ? 'dark' : 'light';
+    return [`${fontName}-font`, 'colors', colorLight];
+});
+
 export const selectSideViewDisplayMode = createSelector(currentPageGetter, page => {
     const mode = defaultSideDisplayMode();
     mode.opened = page.menuShowMode !== "hidden";

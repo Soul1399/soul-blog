@@ -7,9 +7,7 @@ body {
     input, select, textarea {
         font-family: inherit;
         color: inherit;
-        &:focus {
-            border-color: inherit;
-        }
+        font-weight: inherit;
     }
 
     .default-font, .poiret-one-font {
@@ -26,17 +24,16 @@ body {
         --default-hue: 0;
         --opposite-hue: 180;
         --dark: 10%;
-        --bright: 90%;
+        --bright: 80%;
 
         &.dark {
             background-color: hsl(var(--default-hue) 100% var(--dark) / 1);
             color: hsl(var(--opposite-hue) 100% 70% / 1);
-            border-color: hsl(var(--opposite-hue) 100% 70% / 1);
         }
         &.light {
             background-color: hsl(var(--default-hue) 100% var(--bright) / 1);
-            color: hsl(var(--opposite-hue) 100% 30% / 1);
-            border-color: hsl(var(--opposite-hue) 100% 70% / 1);
+            color: hsl(var(--opposite-hue) 30% 30% / 1);
+            font-weight: 600;
         }
     }
 
@@ -47,6 +44,23 @@ body {
 
     .clickable {
         cursor: pointer;
+    }
+
+    a.block {
+        text-decoration: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        &:visited, &:hover, &:active, &:focus, &:focus-visible {
+            text-decoration: none;
+            border: none;
+            outline: none;
+            color: inherit;
+        }
+
+        &:hover span {
+            text-decoration: underline;
+        }
     }
 }
 

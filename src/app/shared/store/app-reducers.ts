@@ -21,7 +21,7 @@ export const pageContextReducer = createReducer(
     }),
     on(toggleSideMenu, (context, actionValue) => {
         const newContext = cloneStateData(context) as AppPageContext;
-        newContext.menuShowMode = actionValue.mode || (newContext.menuShowMode === "hidden" ? "visible-side" : "hidden");
+        newContext.menuShowMode = actionValue.mode || (newContext.menuShowMode === "hidden" ? "visible-over" : "hidden");
         return newContext;
     })
 );

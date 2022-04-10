@@ -1,4 +1,4 @@
-<main role="main" [ngClass]="mainClass">
+<main role="main" [ngClass]="(themeColorsCss$ | async) || []">
   <ng-container
     [ngTemplateOutlet]="mainContent"
     [ngTemplateOutletContext]="{

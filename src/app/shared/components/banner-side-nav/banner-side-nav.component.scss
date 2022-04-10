@@ -1,5 +1,19 @@
 :host {
+    height: 100%;
     display: grid;
-    place-items: start center;
-    min-width: 3vw;
+    place-items: start;
+    grid-template-columns: minmax(6vw, 1fr);
+    grid-auto-rows: 32px;
+
+    & > div, & > a {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+        span {
+            padding-right: 5px;
+        }
+    }
 }

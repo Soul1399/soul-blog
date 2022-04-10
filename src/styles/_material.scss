@@ -1,3 +1,29 @@
+
+.colors {
+    .mat-button-toggle-group-appearance-standard,
+    .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle {
+        border: none;
+    }
+    .mat-button-toggle-appearance-standard {
+        background-color: transparent;
+        opacity: 0.2;
+        &:hover, &.mat-button-toggle-checked {
+            opacity: 1;
+        }
+    }
+
+    &.dark {
+        .mat-button-toggle-group .mat-icon {
+            color: white;
+        }
+    }
+    &.light {
+        .mat-button-toggle-group .mat-icon {
+            color: black;
+        }
+    }
+}
+
 .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
     padding: 3px !important;
     line-height: inherit;

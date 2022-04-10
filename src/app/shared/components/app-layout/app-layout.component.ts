@@ -4,7 +4,7 @@ import { nameof } from 'ts-simple-nameof';
 import { AppPageContext } from '../../models/app-page-context';
 import { AppTheme } from '../../models/app-theme';
 import { toggleSideMenu } from '../../store/app-actions';
-import { selectAppTheme, selectCurrentPage } from '../../store/app-selectors';
+import { selectAppTheme, selectCurrentPage, selectThemeColorsStyles } from '../../store/app-selectors';
 import { AppState } from '../../store/app-state';
 import { BaseComponent } from '../base/base-component';
 
@@ -16,9 +16,9 @@ import { BaseComponent } from '../base/base-component';
 export class AppLayoutComponent extends BaseComponent implements OnInit, OnChanges {
   
   theme$ = this.appStore.select(selectAppTheme);
+  themeColorsCss$ = this.appStore.select(selectThemeColorsStyles);
   pageContext$ = this.appStore.select(selectCurrentPage);
 
-  mainClass: string[] = [];
   
   constructor(private readonly appStore: Store<AppState>) {
     super();
@@ -29,11 +29,7 @@ export class AppLayoutComponent extends BaseComponent implements OnInit, OnChang
   }
 
   ngOnInit(): void {
-    this.pipeUntilDestory(this.theme$).subscribe(thm => {
-      const fontName = thm?.font ? thm.font.replace(/[^a-zA-Z\-]/g, '-').toLowerCase() : 'default';
-      const colorLight = thm?.lightThemeOff ? 'dark' : 'light';
-      this.mainClass = [`${fontName}-font`, 'colors', colorLight];
-    });
+    
   }
 
   displayMenu() {

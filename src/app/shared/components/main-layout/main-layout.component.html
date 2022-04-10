@@ -1,6 +1,6 @@
-<mat-sidenav-container *ngIf="sideDisplayMode$ | async as sideMode">
+<mat-sidenav-container *ngIf="sideDisplayMode$ | async as sideMode" [hasBackdrop]="false">
   <mat-sidenav [mode]="sideMode.mode" [position]="sideMode.position" [opened]="sideMode.opened" (closedStart)="resetSideMode()">
-    <banner-side-nav></banner-side-nav>
+    <banner-side-nav [ngClass]="(themeColorsCss$ | async) || []"></banner-side-nav>
   </mat-sidenav>
   <mat-sidenav-content>
     <app-layout>

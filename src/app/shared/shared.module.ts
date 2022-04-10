@@ -11,6 +11,8 @@ import { HomeComponent } from './components/home/home.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { BannerSideNavComponent } from './components/banner-side-nav/banner-side-nav.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
   ],
   imports: [
     CommonModule,
+    RouterModule,
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     
@@ -33,6 +37,8 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
   ],
   exports: [
     CommonModule,
+    RouterModule,
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     // material modules
