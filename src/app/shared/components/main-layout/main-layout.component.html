@@ -1,5 +1,5 @@
 <mat-sidenav-container *ngIf="sideDisplayMode$ | async as sideMode">
-  <mat-sidenav [mode]="sideMode.mode" [position]="sideMode.position" >
+  <mat-sidenav [mode]="sideMode.mode" [position]="sideMode.position" [opened]="sideMode.opened" (closedStart)="resetSideMode()">
     <banner-side-nav></banner-side-nav>
   </mat-sidenav>
   <mat-sidenav-content>

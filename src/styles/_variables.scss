@@ -1,0 +1,14 @@
+
+$pc: '%';
+
+@for $i from 0 through 100 {
+    .w-#{$i} {
+        width: #{$i}#{$pc};
+    }
+    .h-#{$i} {
+        height: #{$i}#{$pc};
+    }
+    .vww-#{$i} {
+        width: #{$i}vw;
+    }
+}

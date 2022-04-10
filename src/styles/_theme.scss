@@ -7,10 +7,15 @@ body {
     input, select, textarea {
         font-family: inherit;
         color: inherit;
+        &:focus {
+            border-color: inherit;
+        }
     }
 
     .default-font, .poiret-one-font {
         font-family: 'Poiret One' !important;
+        font-weight: 400;
+        font-size: 13pt;
     }
 
     .gruppo-font {
@@ -19,23 +24,25 @@ body {
 
     .colors {
         --default-hue: 0;
-        --opposite-hue: --default-hue + 180;
+        --opposite-hue: 180;
         --dark: 10%;
         --bright: 90%;
 
         &.dark {
-            background-color: hsl(var(--default-hue) var(--dark) 50% / 0.1);
-            color: hsl(var(--opposite-hue) var(--dark) 50% / 0.1);
+            background-color: hsl(var(--default-hue) 100% var(--dark) / 1);
+            color: hsl(var(--opposite-hue) 100% 70% / 1);
+            border-color: hsl(var(--opposite-hue) 100% 70% / 1);
         }
         &.light {
-            background-color: hsl(var(--opposite-hue), var(--bright), 50%, 1);
-            color: hsl(var(--default-hue), var(--bright), 50%, 1);
+            background-color: hsl(var(--default-hue) 100% var(--bright) / 1);
+            color: hsl(var(--opposite-hue) 100% 30% / 1);
+            border-color: hsl(var(--opposite-hue) 100% 70% / 1);
         }
     }
 
     .title-page {
-        font-weight: bold;
-        font-size: 25px;
+        font-weight: 900;
+        font-size: 26pt;
     }
 
     .clickable {

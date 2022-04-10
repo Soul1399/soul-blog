@@ -37,6 +37,6 @@ export class AppLayoutComponent extends BaseComponent implements OnInit, OnChang
   }
 
   displayMenu() {
-    this.appStore.dispatch(toggleSideMenu({ mode: 'visible-side' }));
+    this.appStore.dispatch(toggleSideMenu({ mode: 'visible-over' }));
   }
 }

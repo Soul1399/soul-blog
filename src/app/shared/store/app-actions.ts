@@ -1,6 +1,5 @@
 import { createAction, props } from "@ngrx/store";
 import { MenuShowMode } from "../models/app-page-context";
-import { SideDisplayMode } from "../models/side-display-mode";
 
 export const toggleLightTheme = createAction('[App] Toggle Light Theme', props<{ forcedSwitchValue?: 'off' | 'on' }>());
 export const changeGlobalFont = createAction('[App] Change Global Font', props<{ name: string }>());

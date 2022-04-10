@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { toggleSideMenu } from '../../store/app-actions';
 import { selectSideViewDisplayMode } from '../../store/app-selectors';
 import { AppState } from '../../store/app-state';
 
@@ -19,4 +20,7 @@ export class MainLayoutComponent implements OnInit {
     
   }
 
+  resetSideMode() {
+    this.store.dispatch(toggleSideMenu({}));
+  }
 }
