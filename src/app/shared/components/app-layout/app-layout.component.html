@@ -1,0 +1,24 @@
+<main role="main" [ngClass]="mainClass">
+  <ng-container
+    [ngTemplateOutlet]="mainContent"
+    [ngTemplateOutletContext]="{
+      page: pageContext$ | async,
+      theme: theme$ | async
+    }"
+  ></ng-container>
+</main>
+
+<ng-template #mainContent let-theme="theme" let-page="page">
+  <ng-container *ngIf="page">
+    <top-bar
+      class="top-bar"
+      [isLightColorTheme]="theme.lightThemeOff !== true"
+      (askForMenu)="displayMenu()"
+    ></top-bar>
+    <span class="title title-page">{{ page.pageTitle }}</span>
+
+    <section class="main-section">
+      <ng-content></ng-content>
+    </section>
+  </ng-container>
+</ng-template>

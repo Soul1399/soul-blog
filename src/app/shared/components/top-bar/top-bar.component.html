@@ -1,0 +1,13 @@
+
+<mat-button-toggle-group (change)="toggleColors($event)">
+    <mat-button-toggle value="light" aria-label="Light Theme" [checked]="isLightColorTheme">
+      <mat-icon>light_mode</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="dark" aria-label="Dark Theme" [checked]="!isLightColorTheme">
+        <mat-icon>nightlight_round</mat-icon>
+      </mat-button-toggle>
+</mat-button-toggle-group>
+
+<input type="text" placeholder="search..." class="search-input">
+
+<mat-icon class="clickable" (click)="menuIconClick()">menu_open</mat-icon>

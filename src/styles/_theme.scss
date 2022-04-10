@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+
+    input, select, textarea {
+        font-family: inherit;
+        color: inherit;
+    }
+
+    .default-font, .poiret-one-font {
+        font-family: 'Poiret One' !important;
+    }
+
+    .gruppo-font {
+        font-family: 'Gruppo' !important;
+    }
+
+    .colors {
+        --default-hue: 0;
+        --opposite-hue: --default-hue + 180;
+        --dark: 10%;
+        --bright: 90%;
+
+        &.dark {
+            background-color: hsl(var(--default-hue) var(--dark) 50% / 0.1);
+            color: hsl(var(--opposite-hue) var(--dark) 50% / 0.1);
+        }
+        &.light {
+            background-color: hsl(var(--opposite-hue), var(--bright), 50%, 1);
+            color: hsl(var(--default-hue), var(--bright), 50%, 1);
+        }
+    }
+
+    .title-page {
+        font-weight: bold;
+        font-size: 25px;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+}
+
