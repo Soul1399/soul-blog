@@ -1,4 +1,5 @@
 import { nameof } from "ts-simple-nameof";
+import { AppMenu } from "../models/app-menu";
 import { AppPageContext } from "../models/app-page-context";
 import { AppTheme } from "../models/app-theme";
 import { IEntity } from "../models/ientity";
@@ -15,6 +16,7 @@ export const DEFAULT_LANGUAGE = { code: 'en', name: 'English' };
 export interface AppState {
     theme: AppTheme;
     pageContext: AppPageContext;
+    menu: AppMenu
 }
 
 export function cloneStateData(data: any) : AppTheme | AppPageContext | null {

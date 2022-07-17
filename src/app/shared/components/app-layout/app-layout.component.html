@@ -1,24 +1,27 @@
 <main role="main" [ngClass]="(themeColorsCss$ | async) || []">
   <ng-container
+    *ngIf="pageContext$ | async as page"
     [ngTemplateOutlet]="mainContent"
     [ngTemplateOutletContext]="{
-      page: pageContext$ | async,
+      page,
       theme: theme$ | async
     }"
   ></ng-container>
 </main>
 
 <ng-template #mainContent let-theme="theme" let-page="page">
-  <ng-container *ngIf="page">
-    <top-bar
-      class="top-bar"
-      [isLightColorTheme]="theme.lightThemeOff !== true"
-      (askForMenu)="displayMenu()"
-    ></top-bar>
-    <span class="title title-page">{{ page.pageTitle }}</span>
+  <top-bar
+    class="top-bar"
+    [isLightColorTheme]="theme.lightThemeOff !== true"
+    (askForMenu)="displayMenu()"
+  ></top-bar>
+  <span class="title title-page">{{ page.pageTitle }}</span>
 
-    <section class="main-section">
-      <ng-content></ng-content>
-    </section>
-  </ng-container>
+  <div *ngIf="isLoading$ | async" class="grid full-center w-100 h-100 loading">
+    <mat-spinner [diameter]="32"></mat-spinner>
+  </div>
+
+  <section class="main-section">
+    <ng-content></ng-content>
+  </section>
 </ng-template>

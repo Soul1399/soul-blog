@@ -1,8 +1,10 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { Store } from '@ngrx/store';
-import { toggleLightTheme } from '../../store/app-actions';
-import { AppState } from '../../store/app-state';
+import { Languages } from '../../models/app-languages';
+import { SelectItem } from '../../models/ui/select-item';
+import { changeLanguage, toggleLightTheme } from '../../store/app-actions';
+import { AppState, DEFAULT_LANGUAGE } from '../../store/app-state';
 
 @Component({
   selector: 'top-bar',
@@ -12,8 +14,12 @@ import { AppState } from '../../store/app-state';
 export class TopBarComponent implements OnInit {
   @Input()
   isLightColorTheme: boolean = false;
+  @Input()
+  selectedLanguage: string = DEFAULT_LANGUAGE.code;
   @Output()
   askForMenu = new EventEmitter();
+
+  languages = Languages.map(e => Object.assign(new SelectItem(), e));
 
   constructor(private readonly store: Store<AppState>) { }
 
@@ -26,5 +32,9 @@ export class TopBarComponent implements OnInit {
 
   menuIconClick() {
     this.askForMenu.emit();
+  }
+
+  languageSelected(code: string) {
+    this.store.dispatch(changeLanguage({ code: code }));
   }
 }

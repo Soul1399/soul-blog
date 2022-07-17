@@ -1,54 +1,70 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
-import { HomeComponent } from './components/home/home.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { BannerSideNavComponent } from './components/banner-side-nav/banner-side-nav.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
-import { HttpClientModule } from '@angular/common/http';
+import { PageLayoutComponent } from './components/page-layout/page-layout.component';
+import { BaseComponent } from "./components/base/base-component";
 import { RouterModule } from '@angular/router';
+import { StaticGridComponent } from './components/static-grid/static-grid.component';
+import { StaticGridRowFilterPipe } from './pipes/static-grid-row-filter.pipe';
+import { StaticGridCellSelectComponent } from './components/static-grid/static-grid-cell-select/static-grid-cell-select.component';
+import { StaticGridCellInputComponent } from './components/static-grid/static-grid-cell-input/static-grid-cell-input.component';
+import { StaticGridCellAutocompleteComponent } from './components/static-grid/static-grid-cell-autocomplete/static-grid-cell-autocomplete.component';
 
 @NgModule({
   declarations: [
+    BaseComponent,
     MainLayoutComponent,
-    HomeComponent,
     AppLayoutComponent,
     BannerSideNavComponent,
-    TopBarComponent
+    TopBarComponent,
+    PageLayoutComponent,
+    StaticGridComponent,
+    StaticGridRowFilterPipe,
+    StaticGridCellSelectComponent,
+    StaticGridCellInputComponent,
+    StaticGridCellAutocompleteComponent
   ],
   imports: [
-    CommonModule,
     RouterModule,
-    HttpClientModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    
+    CommonModule,
     // material modules,
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule
   ],
   exports: [
-    CommonModule,
     RouterModule,
-    HttpClientModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     // material modules
     MatIconModule,
     MatInputModule,
     MatSidenavModule,
     MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+
     // components
+    BaseComponent,
     MainLayoutComponent,
-    //HomeComponent
+    AppLayoutComponent,
+    BannerSideNavComponent,
+    TopBarComponent,
+    PageLayoutComponent,
+    StaticGridComponent,
+    StaticGridRowFilterPipe,
+    StaticGridCellSelectComponent,
+    StaticGridCellInputComponent
   ]
 })
 export class SharedModule { }

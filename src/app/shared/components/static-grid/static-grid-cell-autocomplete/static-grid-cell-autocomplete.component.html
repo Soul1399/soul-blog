@@ -1,0 +1,16 @@
+
+<input #inputAutocomplete type="text"
+    [id]="htmlId"
+    class="w-100"
+    [ngClass]="cssInputClass"
+    [value]="textValue"
+    [disabled]="!allowChange"
+    [matAutocomplete]="auto"
+    [matAutocompleteDisabled]="!allowChange"
+    (input)="onInput(inputAutocomplete.value)">
+
+<mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option" (onSelectionChange)="onOptionSelected($event)">
+        {{ option.name }}
+    </mat-option>
+</mat-autocomplete>

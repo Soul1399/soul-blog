@@ -3,7 +3,9 @@
     <mat-icon class="clickable" (click)="closeClick()">close</mat-icon>
 </div>
 
-<a routerLink="/" class="block">
-    <span>Home</span>
-    <mat-icon>home</mat-icon>
-</a>
+<ng-container *ngIf="menu$ | async as menu">
+    <a *ngFor="let link of menu.links" [routerLink]="link.url" class="block">
+        <span>{{ link.label }}</span>
+        <mat-icon *ngIf="link.iconCode">{{ link.iconCode }}</mat-icon>
+    </a>
+</ng-container>

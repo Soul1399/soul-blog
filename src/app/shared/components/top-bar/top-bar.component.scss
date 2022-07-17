@@ -1,6 +1,7 @@
+@use '/src/styles/flex';
+
 :host {
-    display: flex;
-    align-items: center;
+    @extend .flex, .v-flex-align-middle;
     justify-content: space-between;
     padding: 5px;
     box-sizing: border-box;

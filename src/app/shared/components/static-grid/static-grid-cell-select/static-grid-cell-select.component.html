@@ -1,0 +1,9 @@
+
+<select [id]="htmlId" #select *ngIf="source$ | async as items"
+    (change)="onSelectChanged(select.value, items)"
+    (blur)="onBlur(select.value, items)"
+    (keyup)="onKeyup($event)"
+    [disabled]="!allowChange">
+    <option *ngIf="emptyItem" [value]="emptyItem.code">{{ emptyItem.name }}</option>
+    <option *ngFor="let item of items" [disabled]="item.disabled" [selected]="item.code == value" [value]="item.code">{{ item.name }}</option>
+</select>

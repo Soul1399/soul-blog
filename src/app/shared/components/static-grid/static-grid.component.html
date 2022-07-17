@@ -1,0 +1,100 @@
+
+<div #rowsArea class="static-grid-area">
+    <div class="head-container">
+        <div class="static-grid-head-area">
+            <ng-container *ngIf="headTemplate?.outlet == null">
+                <!-- title / add button -->
+                <span *ngIf="headTitle?.trim()">{{ headTitle }}</span>
+                <button type="button" *ngIf="configuration.commands.add.visible" 
+                        [disabled]="!configuration.commands.add.enabled"
+                        (click)="configuration.commands.add.execute(configuration, null, null, null, rowData)">➕</button>
+            </ng-container>
+            <ng-container *ngIf="headTemplate.outlet != null"
+                [ngTemplateOutlet]="headTemplate.outlet || null"
+                [ngTemplateOutletContext]="{ context: headTemplate.outletContext || null, component: this }">
+            </ng-container>
+        </div>
+
+        <div class="static-grid-headers-area">
+            <!-- headers -->
+            <ng-container *ngFor="let header of headers; last as isLast">
+                <div class="static-grid-header" *ngIf="header.visible !== false"
+                    [ngClass]="header.cssClass || []"
+                    [ngStyle]="{ width: (header.width || 0).toString() + 'px', 'margin-right': isLast ? '0' : (configuration.cellGap + 'px') }">{{ header.shortLabel || header.label }}</div>
+            </ng-container>
+        </div>
+    </div>
+    <!-- rows -->
+    <ng-container *ngFor="let row of rowData | staticGridRowFilter: this">
+        <div class="static-grid-row" [ngStyle]="{ 'margin-bottom': row.spaceAfter }">
+            <ng-container *ngFor="let cell of row.cells">
+                <ng-container *ngIf="cell.visible">
+                    <ng-container *ngIf="!cell.isEditable"
+                        [ngTemplateOutlet]="readonlyCell"
+                        [ngTemplateOutletContext]="{
+                            id: cell.elementId,
+                            text: cell.displayedValue || cell.value,
+                            cssClass: cell.cssClass || [],
+                            cssStyle: cell.cssStyle || {}
+                        }"></ng-container>
+
+                    <ng-container *ngIf="cell.isEditable"
+                        [ngTemplateOutlet]="cellTemplate"
+                        [ngTemplateOutletContext]="{ row, cell, text: (cell.displayedValue || cell.value) }"></ng-container>
+
+                </ng-container>
+                <input [attr.id]="'value_' + cell.elementId" type="hidden" [value]="cell.value">
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <div class="static-grid-footer-area">
+        <!-- footer -->
+        <ng-container *ngIf="footerTemplate.outlet != null"
+            [ngTemplateOutlet]="footerTemplate.outlet || null"
+            [ngTemplateOutletContext]="{ context: footerTemplate.outletContext || null, component: this }">
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #cellTemplate let-row="row" let-cell="cell" let-text="text">
+    <div [id]="cell.elementId" class="static-grid-cell" [ngClass]="cell.cssClass || []" [ngStyle]="cell.cssStyle || {}">
+        <span [id]="'text_' + cell.elementId" *ngIf="!cell.isDirectEdit && !cell.isEditing"
+            class="not-editing"
+            [ngClass]="{ empty: text === '' || text == null }"
+            (click)="startEditCell($event, cell)"
+            (dblclick)="startEditCell($event, cell)">{{ text }}</span>
+
+        <ng-container *ngIf="cell.isDirectEdit || cell.isEditing" [ngSwitch]="cell.settings.cellType">
+
+            <app-static-grid-cell-select *ngSwitchCase="cellTypeEnum.select"
+                [htmlId]="cell.settings.cellType + '_' + cell.elementId"
+                [value]="cell.value"
+                [allowChange]="cell.enabled"
+                [source$]="cell.relatedValues"
+                [emptyItem]="cell.params?.emptyItem"
+                (selectionChanged)="onCellValueChanging(row, cell, $event)"
+                (selectBlur)="onCellBlur(row, cell, $event)"
+                (cancelEdit)="cancelEdit(cell)"></app-static-grid-cell-select>
+            
+            <app-static-grid-cell-input *ngSwitchCase="cellTypeEnum.input"
+                [htmlId]="cell.settings.cellType + '_' + cell.elementId"
+                [allowChange]="cell.enabled"
+                [value]="cell.displayedValue"
+                [rawValue]="cell.value"
+                [parser]="cell.settings.formatter?.parse"
+                [formatter]="cell.settings.formatter?.format"
+                (inputValueChanging)="onCellValueChanging(row, cell, $event)"
+                (inputBlur)="onCellBlur(row, cell, $event)"
+                (cancelEdit)="cancelEdit(cell)"></app-static-grid-cell-input>
+
+        </ng-container>
+    </div>
+
+</ng-template>
+
+<ng-template #readonlyCell let-id="id" let-text="text" let-cssClass="cssClass" let-cssStyle="cssStyle">
+    <div class="static-grid-cell" [id]="id" [ngClass]="cssClass" [ngStyle]="cssStyle">
+        <span [id]="'label_' + id">{{ text }}</span>
+    </div>
+</ng-template>

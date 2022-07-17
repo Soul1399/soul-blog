@@ -3,18 +3,30 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { StoreModule } from '@ngrx/store';
-import { pageContextReducer, themeReducer } from './shared/store/app-reducers';
+import { menuReducer, pageContextReducer, themeReducer } from './shared/store/app-reducers';
+import { DefaultComponent } from './default/default.component';
+import {HttpClientModule} from "@angular/common/http";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserModule} from "@angular/platform-browser";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DefaultComponent
   ],
   imports: [
-    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
     SharedModule,
+    AppRoutingModule,
     StoreModule.forRoot({
       pageContext: pageContextReducer,
-      theme: themeReducer
+      theme: themeReducer,
+      menu: menuReducer
     }),
   ],
   providers: [],

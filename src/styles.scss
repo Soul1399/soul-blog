@@ -2,8 +2,30 @@
 @use 'styles/theme';
 @use 'styles/material';
 @use 'styles/variables';
+@use 'styles/flex';
+@use 'styles/grid';
 
 html, body { @extend .h-100; }
 body {
     margin: 0;
+
+    .grid-input {
+        input {
+            background-color: transparent;
+            color: white;
+            padding: 0 0.5ch;
+            border-style: solid;
+            border-width: 1px;
+            height: 80%;
+        }
+    }
+
+    .grid-select {
+        select {
+            background-color: transparent;
+            color: white;
+            height: 80%;
+            min-width: 10ch;
+        }
+    }
 }

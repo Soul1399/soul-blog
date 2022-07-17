@@ -8,11 +8,15 @@ export class AppPageContext {
     language: string;
     names: { [lang: string]: AppPageNames };
     menuShowMode: MenuShowMode;
+    isLoading: boolean;
+    layout: string;
 
     constructor(language: string = DEFAULT_LANGUAGE.code) {
         this.language = language;
         this.names = {};
         this.menuShowMode = "hidden";
+        this.isLoading = true;
+        this.layout = '';
         Languages.reduce((obj, l) => {
             obj[l.code.toString()] = new AppPageNames();
             return obj;
@@ -20,6 +24,7 @@ export class AppPageContext {
     }
 
     get pageTitle() {
+        if (!this.names || !this.names[this.language]) return '';
         return this.names[this.language].title || this.names[this.language].name;
     }
 }

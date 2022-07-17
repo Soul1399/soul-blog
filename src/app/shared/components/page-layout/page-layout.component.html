@@ -1,0 +1,3 @@
+<div [hidden]="isLoading$ | async" [ngClass]="(layout$ | async) || DefaultLayout">
+    <ng-content></ng-content>
+</div>

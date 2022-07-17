@@ -1,26 +1,32 @@
 
 main {
-    height: 100%;
-    display: grid;
-    grid-template:
+  height: 100%;
+  display: grid;
+  grid-template:
         " topbar topbar  " auto
         " title  title   " auto
         " .      section " 1fr
         / 1fr 80vw;
-    
-    .top-bar {
-        grid-area: topbar;
-    }
 
-    .title {
-        grid-area: title;
-        display: grid;
-        place-items: center;
-    }
+  .top-bar {
+    grid-area: topbar;
+  }
 
-    .main-section {
-        grid-area: section;
-        box-sizing: border-box;
-        padding: 10px;
-    }
+  .title {
+    grid-area: title;
+    display: grid;
+    place-items: center;
+  }
+
+  .main-section {
+    grid-area: section;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .loading {
+    grid-column-start: 1;
+    grid-column-end: -1;
+    grid-row-start: 3;
+  }
 }

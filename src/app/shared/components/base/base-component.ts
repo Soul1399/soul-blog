@@ -1,12 +1,10 @@
-import { Component, OnDestroy } from "@angular/core";
+import {Component, OnDestroy} from "@angular/core";
 import { Observable, Subject, takeUntil } from "rxjs";
 
-@Component({
-    template: ''
-})
+@Component({ template: ''})
 export class BaseComponent implements OnDestroy {
     private unsubscribeAlert = new Subject<boolean>();
-    protected pipeUntilDestory<T>(observable: Observable<T>) {
+    protected pipeUntilDestroy<T>(observable: Observable<T>) {
         return observable.pipe(takeUntil(this.unsubscribeAlert));
     }
 

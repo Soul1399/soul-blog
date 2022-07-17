@@ -2,7 +2,7 @@ export class AppPageNames {
     key: string;
     name: string;
     title: string | null;
-    description?: string;
+    description?: string | null;
 
     constructor() {
         this.key = '';

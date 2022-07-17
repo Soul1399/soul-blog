@@ -1,10 +1,12 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { nameof } from 'ts-simple-nameof';
-import { AppPageContext } from '../../models/app-page-context';
-import { AppTheme } from '../../models/app-theme';
 import { toggleSideMenu } from '../../store/app-actions';
-import { selectAppTheme, selectCurrentPage, selectThemeColorsStyles } from '../../store/app-selectors';
+import {
+  selectAppTheme,
+  selectCurrentPage,
+  selectLoadingPageFlag,
+  selectThemeColorsStyles
+} from '../../store/app-selectors';
 import { AppState } from '../../store/app-state';
 import { BaseComponent } from '../base/base-component';
 
@@ -14,22 +16,22 @@ import { BaseComponent } from '../base/base-component';
   styleUrls: ['./app-layout.component.scss']
 })
 export class AppLayoutComponent extends BaseComponent implements OnInit, OnChanges {
-  
+
   theme$ = this.appStore.select(selectAppTheme);
   themeColorsCss$ = this.appStore.select(selectThemeColorsStyles);
   pageContext$ = this.appStore.select(selectCurrentPage);
+  isLoading$ = this.appStore.select(selectLoadingPageFlag);
 
-  
   constructor(private readonly appStore: Store<AppState>) {
     super();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
   }
 
   ngOnInit(): void {
-    
+
   }
 
   displayMenu() {

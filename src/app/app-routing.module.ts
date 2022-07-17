@@ -1,9 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './shared/components/home/home.component';
+import { DefaultComponent } from "./default/default.component";
+import { PageService } from './shared/services/page.service';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent }
+  { path: '', component: DefaultComponent },
+  {
+    path: 'blog',
+    loadChildren: () => import('./container/container.module').then(m => m.ContainerModule),
+    resolve: { context: PageService }
+  }
 ];
 
 @NgModule({

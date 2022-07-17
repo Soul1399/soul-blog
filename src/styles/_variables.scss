@@ -11,4 +11,10 @@ $pc: '%';
     .vww-#{$i} {
         width: #{$i}vw;
     }
+    .p-#{$i}, .p-#{$i}px {
+        padding: #{$i}px;
+    }
+    .m-#{$i}, .m-#{$i}px {
+        margin: #{$i}px;
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { toggleSideMenu } from '../../store/app-actions';
-import { selectThemeColorsStyles } from '../../store/app-selectors';
+import { selectAppMenu, selectThemeColorsStyles } from '../../store/app-selectors';
 import { AppState } from '../../store/app-state';
 
 @Component({
@@ -10,7 +10,7 @@ import { AppState } from '../../store/app-state';
   styleUrls: ['./banner-side-nav.component.scss']
 })
 export class BannerSideNavComponent implements OnInit {
-  
+  menu$ = this.appStore.select(selectAppMenu);
   constructor(private readonly appStore: Store<AppState>) { }
 
   ngOnInit(): void {

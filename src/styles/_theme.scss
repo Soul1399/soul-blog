@@ -10,6 +10,14 @@ body {
         font-weight: inherit;
     }
 
+    select {
+        background-color: transparent;
+        option {
+            color: black;
+            background-color: white;
+        }
+    }
+
     .default-font, .poiret-one-font {
         font-family: 'Poiret One' !important;
         font-weight: 400;
@@ -28,11 +36,11 @@ body {
 
         &.dark {
             background-color: hsl(var(--default-hue) 100% var(--dark) / 1);
-            color: hsl(var(--opposite-hue) 100% 70% / 1);
+            color: hsl(var(--opposite-hue) 100% 75% / 1);
         }
         &.light {
             background-color: hsl(var(--default-hue) 100% var(--bright) / 1);
-            color: hsl(var(--opposite-hue) 30% 30% / 1);
+            color: hsl(var(--opposite-hue) 50% 25% / 1);
             font-weight: 600;
         }
     }

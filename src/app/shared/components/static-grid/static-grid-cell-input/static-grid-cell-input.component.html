@@ -1,0 +1,11 @@
+
+<input #input type="text"
+    [id]="htmlId"
+    class="w-100"
+    [ngClass]="cssClass"
+    [value]="value"
+    [disabled]="!allowChange"
+    (change)="onInputValueChanged(input.value)"
+    (focus)="startFocus($event)"
+    (keyup)="onKeyup($event)"
+    (blur)="endFocus($event)">
