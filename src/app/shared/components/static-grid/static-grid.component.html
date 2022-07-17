@@ -88,6 +88,14 @@
                 (inputBlur)="onCellBlur(row, cell, $event)"
                 (cancelEdit)="cancelEdit(cell)"></app-static-grid-cell-input>
 
+            <app-static-grid-cell-autocomplete *ngSwitchCase="cellTypeEnum.autocomplete"
+                [htmlId]="cell.settings.cellType + '_' + cell.elementId"
+                [allowChange]="cell.enabled"
+                [textValue]="cell.displayedValue"
+                [rawValue]="cell.value"
+                [availableOptions$]="cell.relatedValues"
+                (selectionChanged)="onCellValueChanging(row, cell, $event)"></app-static-grid-cell-autocomplete>
+
         </ng-container>
     </div>
 
