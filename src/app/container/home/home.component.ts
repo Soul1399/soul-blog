@@ -165,13 +165,13 @@ export class HomeComponent implements OnInit {
           cellType: StaticGridCellType.autocomplete,
           cellEditMode: StaticGridEditMode.direct,
           headers: [],
-          cssClass: ['grid-innput', 'p-3'],
+          cssClass: ['grid-input', 'p-3'],
           relatedValues: countries,
           formatter: {
             format: code => countries.find(c => c.code == code)?.name ?? '',
             parse: text => countries.find(c => c.name == text)?.code
           },
-          params: { filterDelay: 0 },
+          params: { filterDelay: 0, dropzoneCssClass: ['grid-input-mat-autocomplete'], panelWidth: 'auto' },
           placeItem: 'center'
         },
       ],

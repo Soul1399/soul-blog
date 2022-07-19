@@ -10,7 +10,7 @@
     (input)="onInput(inputAutocomplete.value)"
     (blur)="onInputBlur(inputAutocomplete.value)">
 
-<mat-autocomplete #auto="matAutocomplete">
+<mat-autocomplete #auto="matAutocomplete" [class]="dropzoneCssClass" [panelWidth]="panelWidth || ''">
     <mat-option *ngFor="let option of filteredOptions$ | async" [value]="option" (onSelectionChange)="onOptionSelected($event)">
         {{ option.name }}
     </mat-option>

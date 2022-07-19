@@ -36,6 +36,10 @@ export class StaticGridCellAutocompleteComponent implements OnInit {
   @Input()
   cssInputClass: string[] = [];
   @Input()
+  dropzoneCssClass: string[] = [];
+  @Input()
+  panelWidth?: string | number | null;
+  @Input()
   textValue: string | null = null;
   @Input()
   rawValue: any;

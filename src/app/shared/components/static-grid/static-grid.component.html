@@ -95,6 +95,8 @@
                 [rawValue]="cell.value"
                 [availableOptions$]="cell.relatedValues"
                 [filterDelay]="cell.params.filterDelay"
+                [dropzoneCssClass]="cell.params.dropzoneCssClass"
+                [panelWidth]="cell.params.panelWidth"
                 [textValue]="cell.displayedValue || cell.value"
                 (selectionChanged)="onCellValueChanging(row, cell, $event)"></app-static-grid-cell-autocomplete>
 

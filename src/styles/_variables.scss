@@ -1,6 +1,6 @@
 
 $pc: '%';
-
+$units: pc, ch, em, rem, pt, vw, vh, cm, mm, in;
 @for $i from 0 through 100 {
     .w-#{$i} {
         width: #{$i}#{$pc};
@@ -17,4 +17,28 @@ $pc: '%';
     .m-#{$i}, .m-#{$i}px {
         margin: #{$i}px;
     }
+
+    @each $unit in $units {
+        .p-#{$i}#{$unit} {
+            padding: #{$i}#{$unit};
+        }
+        .m-#{$i}#{$unit} {
+            margin: #{$i}#{$unit};
+        }
+    }
+
+    .fsz-#{$i}pt {
+        font-size: #{$i}pt;
+    }
+    .fsz-#{$i}px {
+        font-size: #{$i}px;
+    }
+}
+
+.w-auto {
+    width: auto;
+}
+
+.h-auto {
+    height: auto;
 }
