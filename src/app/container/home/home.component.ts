@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
+import { Countries } from 'src/app/shared/models/countries-ref';
 import { SelectItem } from 'src/app/shared/models/ui/select-item';
 import { StaticGridCellOfRow } from 'src/app/shared/models/ui/static-grid-cell-of-row';
 import { StaticGridCellType } from 'src/app/shared/models/ui/static-grid-cell-type';
@@ -19,9 +20,9 @@ export class HomeComponent implements OnInit {
   gridConfig = new StaticGridConfiguration();
   gridHeadersMap = new Map<string, StaticGridHeader>();
   gridData = [
-    { value: '1', text: 'test 1', type: 'S', avgValue: 0.0 },
-    { value: '2', text: 'test 2', type: 'S', avgValue: null },
-    { value: '3', text: 'test 3', type: 'S', avgValue: null },
+    { value: '1', text: 'test 1', type: 'S', avgValue: 0.0, country: null },
+    { value: '2', text: 'test 2', type: 'S', avgValue: null, country: null },
+    { value: '3', text: 'test 3', type: 'S', avgValue: null, country: null },
   ];
   typesOfData = [
     new SelectItem('S', 'single'),
@@ -73,7 +74,7 @@ export class HomeComponent implements OnInit {
                 .sort((a, b) => (a == b ? 0 : a > b ? 1 : -1))
             )
           : 1) ?? 1;
-      const newData = { value: (lastValue + 1).toString(), text: '', type: '', avgValue: 0.0 };
+      const newData = { value: (lastValue + 1).toString(), text: '', type: '', avgValue: 0.0, country: null };
       this.gridData = this.gridData.concat([newData]);
       return newData;
     };
@@ -118,7 +119,8 @@ export class HomeComponent implements OnInit {
           cssClass: ['grid-select', 'p-3'],
           relatedValues: this.typesOfData,
           params: { emptyItem: new SelectItem() },
-          placeItem: 'center'
+          placeItem: 'center' ,
+          width: 200
         },
       ],
     });
@@ -145,6 +147,30 @@ export class HomeComponent implements OnInit {
           },
           headers: [],
           cssClass: ['grid-input', 'p-3'],
+          placeItem: 'center'
+        },
+      ],
+    });
+    this.linkCellWithHeader(key);
+
+    const countries = Countries.map(c => Object.assign(new SelectItem(), c));
+    key = 'COUNTRY';
+    this.gridHeadersMap.set(key, {
+      label: 'Country',
+      width: 150,
+      relatedCells: [
+        {
+          valueField: 'country',
+          cellType: StaticGridCellType.autocomplete,
+          cellEditMode: StaticGridEditMode.direct,
+          headers: [],
+          cssClass: ['grid-innput', 'p-3'],
+          relatedValues: countries,
+          formatter: {
+            format: code => countries.find(c => c.code == code)?.name ?? '',
+            parse: text => countries.find(c => c.name == text)?.code
+          },
+          params: { filterDelay: 0 },
           placeItem: 'center'
         },
       ],

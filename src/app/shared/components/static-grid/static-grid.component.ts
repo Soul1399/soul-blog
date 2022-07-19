@@ -18,7 +18,7 @@ import { StaticGridConfiguration } from '../../models/ui/static-grid-configurati
 import { StaticGridRowContext } from '../../models/ui/static-grid-row-context';
 import { defineEmptyCell, getCellContextValues, StaticGridCellContext } from '../../models/ui/static-grid-cell-context';
 import { StaticGridCellType } from '../../models/ui/static-grid-cell-type';
-import { fromEvent, Observable, of, Subscription, first, map, BehaviorSubject } from 'rxjs';
+import { fromEvent, Observable, of, Subscription, first, map, BehaviorSubject, defaultIfEmpty } from 'rxjs';
 import { StaticGridEditMode } from '../../models/ui/static-grid-edit-mode';
 import { SelectItem } from '../../models/ui/select-item';
 import { StaticGridTemplate } from '../../models/ui/static-grid-template';
@@ -48,6 +48,11 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
   footerTemplate: StaticGridTemplate = { outlet: null, outletContext: null, type: 'footer' };
   @Input()
   @OnChange<StaticGridHeader[] | null>(function(this: StaticGridComponent, headers, change) {
+    if (_.isArray(change.currentValue) && _.isArray(change.previousValue) &&
+      change.currentValue.length == change.previousValue.length &&
+      _.intersection(change.currentValue, change.previousValue).length == change.currentValue.length) {
+        return;
+    }
     this.headersHaveChanged(headers);
   })
   headers?: StaticGridHeader[] | null = null;
@@ -155,7 +160,8 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
     if (row == null) return [];
     const config = this.configuration;
     const cells: StaticGridCellContext[] = [];
-    this.buildCellsFromHeaders(row, config, cells);
+    this.buildCellsFromHeaders(row, cells);
+    this.buildCellsFromCellsOfRow(row, cells);
 
     // apply cell gap to all except last
     _.initial(cells).forEach((c) => {
@@ -172,7 +178,6 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
 
   buildCellsFromHeaders(
     row: StaticGridRowContext,
-    config: StaticGridConfiguration,
     cells: StaticGridCellContext[]
   ) {
     if (
@@ -192,7 +197,7 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
               value: values.value,
               displayedValue: values.displayedValue,
               editedValue: values.editedValue,
-              width: `${cellOfRow.width || columnsWidth || config.cellWidth}px`,
+              width: `${cellOfRow.width || columnsWidth || this.configuration.cellWidth}px`,
               spaceAfter: '0',
               enabled:
                 (header.enabled ?? true) &&
@@ -233,6 +238,12 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       }
+    }
+  }
+
+  buildCellsFromCellsOfRow(row: StaticGridRowContext, cells: StaticGridCellContext[]) {
+    if (_.isArray(this.cellsOfRow)) {
+      
     }
   }
 
@@ -281,6 +292,10 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setValueFromInput(row, cell, newValue).pipe(first()).subscribe(c => this.validateCell(cell));
     }
     else if (cell.settings.cellType == StaticGridCellType.select) {
+      const item = newValue as SelectItem;
+      this.setValueFromInput(row, cell, item.code).pipe(first()).subscribe(c => this.validateCell(cell));
+    }
+    else if (cell.settings.cellType == StaticGridCellType.autocomplete) {
       const item = newValue as SelectItem;
       this.setValueFromInput(row, cell, item.code).pipe(first()).subscribe(c => this.validateCell(cell));
     }
@@ -378,7 +393,21 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   headersHaveChanged(headers: StaticGridHeader[] | null) {
+    this.adjustHeadersWidths();
     this.reloadRows();
+  }
+
+  adjustHeadersWidths() {
+    if (_.isArray(this.headers)) {
+      this.headers.forEach(hd => {
+        if (_.isArray(hd.relatedCells) && hd.relatedCells.length > 0) {
+          const totalWidth = hd.relatedCells.reduce((x, y) => x + (y.width ?? 0), 0);
+          if (hd.width == null || hd.width < totalWidth) {
+            hd.width = totalWidth;
+          }
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

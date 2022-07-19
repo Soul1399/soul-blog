@@ -80,7 +80,7 @@
             <app-static-grid-cell-input *ngSwitchCase="cellTypeEnum.input"
                 [htmlId]="cell.settings.cellType + '_' + cell.elementId"
                 [allowChange]="cell.enabled"
-                [value]="cell.displayedValue"
+                [value]="cell.displayedValue || cell.value"
                 [rawValue]="cell.value"
                 [parser]="cell.settings.formatter?.parse"
                 [formatter]="cell.settings.formatter?.format"
@@ -94,6 +94,8 @@
                 [textValue]="cell.displayedValue"
                 [rawValue]="cell.value"
                 [availableOptions$]="cell.relatedValues"
+                [filterDelay]="cell.params.filterDelay"
+                [textValue]="cell.displayedValue || cell.value"
                 (selectionChanged)="onCellValueChanging(row, cell, $event)"></app-static-grid-cell-autocomplete>
 
         </ng-container>

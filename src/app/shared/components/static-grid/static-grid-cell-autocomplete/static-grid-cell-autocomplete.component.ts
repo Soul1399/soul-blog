@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatAutocomplete } from '@angular/material/autocomplete';
 import { MatOptionSelectionChange } from '@angular/material/core';
 import * as _ from 'lodash';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import {
-  combineLatest,
   combineLatestWith,
   debounceTime,
   map,
-  mergeWith,
   switchMap,
 } from 'rxjs/operators';
+import { Countries } from 'src/app/shared/models/countries-ref';
 import { SelectItem } from 'src/app/shared/models/ui/select-item';
 import { OnChange } from 'src/app/shared/on-change';
 
@@ -48,11 +48,13 @@ export class StaticGridCellAutocompleteComponent implements OnInit {
 
   constructor() {}
 
+  @ViewChild('auto') matAutocomplete?: MatAutocomplete;
+
   @Input()
   set availableOptions$(value: SelectItem[] | Observable<SelectItem[]> | null) {
     if (value instanceof Observable) this.options$ = value;
     else if (_.isArguments(value)) this.options$ = of(value);
-    this.options$ = of([]);
+    else this.options$ = of([]);
     this.setupOptions();
   }
 
@@ -64,11 +66,17 @@ export class StaticGridCellAutocompleteComponent implements OnInit {
     this.inputText$.next(text);
   }
 
+  onInputBlur(text: string) {
+    console.log('matAutocomplete');
+    console.log(this.matAutocomplete);
+  }
+
   onOptionSelected(item: MatOptionSelectionChange<SelectItem>) {
     this.selectionChanged.emit(item.source.value);
   }
 
   setupOptions() {
+    if (this.inputText$ == null) return;
     this.filteredOptions$ = this.inputText$.pipe(
       debounceTime(this.filterDelay < 0 ? 0 : this.filterDelay),
       switchMap(text => {
