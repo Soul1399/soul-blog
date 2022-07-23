@@ -1,20 +1,36 @@
 
-<div #rowsArea class="static-grid-area">
-    <div class="head-container">
-        <div *ngIf="showHeadOfGrid" class="static-grid-head-area">
-            <ng-container *ngIf="headTemplate?.outlet == null">
-                <!-- title / add button -->
-                <span *ngIf="headTitle?.trim()">{{ headTitle }}</span>
-                <button type="button" *ngIf="configuration.commands.add.visible" 
-                        [disabled]="!configuration.commands.add.enabled"
-                        (click)="configuration.commands.add.execute(configuration, null, null, null, rowData)">➕</button>
-            </ng-container>
-            <ng-container *ngIf="headTemplate.outlet != null"
-                [ngTemplateOutlet]="headTemplate.outlet || null"
-                [ngTemplateOutletContext]="{ context: headTemplate.outletContext || null, component: this }">
-            </ng-container>
-        </div>
+<div #rowsArea class="static-grid-area"
+    [ngClass]="(configuration.cssRenderMode || 'flex') + '-mode'"
+    [ngStyle]="{
+        'grid-template-columns': cssGridTemplateColumns,
+        'row-gap': configuration.cssRenderMode == 'grid' ? (configuration.rowGap || 0) + 'px' : '',
+        'column-gap': configuration.cssRenderMode == 'grid' ? (configuration.cellGap || 0) + 'px' : ''
+    }">
+    <ng-container [ngSwitch]="configuration.cssRenderMode">
+        <ng-container *ngSwitchCase="'grid'" [ngTemplateOutlet]="gridCssGrid"></ng-container>
+        <ng-container *ngSwitchDefault [ngTemplateOutlet]="flexGrid"></ng-container>
+    </ng-container>
+</div>
 
+<ng-template #head>
+    <div class="static-grid-head-area">
+        <ng-container *ngIf="headTemplate?.outlet == null">
+            <!-- title / add button -->
+            <span *ngIf="headTitle?.trim()">{{ headTitle }}</span>
+            <button type="button" *ngIf="configuration.commands.add.visible" 
+                    [disabled]="!configuration.commands.add.enabled"
+                    (click)="configuration.commands.add.execute(configuration, null, null, null, rowData)">➕</button>
+        </ng-container>
+        <ng-container *ngIf="headTemplate.outlet != null"
+            [ngTemplateOutlet]="headTemplate.outlet || null"
+            [ngTemplateOutletContext]="{ context: headTemplate.outletContext || null, component: this }">
+        </ng-container>
+    </div>
+</ng-template>
+
+<ng-template #flexGrid>
+    <div class="head-container">
+        <ng-container *ngIf="showHeadOfGrid" [ngTemplateOutlet]="head"></ng-container>
         <div class="static-grid-headers-area">
             <!-- headers -->
             <ng-container *ngFor="let header of headers; last as isLast">
@@ -55,7 +71,7 @@
             [ngTemplateOutletContext]="{ context: footerTemplate.outletContext || null, component: this }">
         </ng-container>
     </div>
-</div>
+</ng-template>
 
 <ng-template #cellTemplate let-row="row" let-cell="cell" let-text="text">
     <div [id]="cell.elementId" class="static-grid-cell" [ngClass]="cell.cssClass || []" [ngStyle]="cell.cssStyle || {}">
@@ -109,4 +125,36 @@
     <div class="static-grid-cell" [id]="id" [ngClass]="cssClass" [ngStyle]="cssStyle">
         <span [id]="'label_' + id">{{ text }}</span>
     </div>
+</ng-template>
+
+<ng-template #gridCssGrid>
+    <div class="head-container">
+        <ng-container *ngIf="showHeadOfGrid" [ngTemplateOutlet]="head"></ng-container>
+    </div>
+    <!-- headers -->
+    <ng-container *ngFor="let header of headers; last as isLast">
+        <div class="static-grid-header" *ngIf="header.visible !== false"
+            [ngClass]="header.cssClass || []"
+            [ngStyle]="{ width: (header.width || 0).toString() + 'px', 'margin-right': isLast ? '0' : (configuration.cellGap + 'px') }">{{ header.shortLabel || header.label }}</div>
+    </ng-container>
+    <!-- rows -->
+    <ng-container *ngFor="let row of rowData | staticGridRowFilter: this">
+        <ng-container *ngFor="let cell of row.cells">
+            <ng-container *ngIf="cell.visible">
+                <ng-container *ngIf="!cell.isEditable"
+                    [ngTemplateOutlet]="readonlyCell"
+                    [ngTemplateOutletContext]="{
+                        id: cell.elementId,
+                        text: cell.displayedValue || cell.value,
+                        cssClass: cell.cssClass || [],
+                        cssStyle: cell.cssStyle || {}
+                    }"></ng-container>
+
+                <ng-container *ngIf="cell.isEditable"
+                    [ngTemplateOutlet]="cellTemplate"
+                    [ngTemplateOutletContext]="{ row, cell, text: (cell.displayedValue || cell.value) }"></ng-container>
+
+            </ng-container>
+        </ng-container>
+    </ng-container>
 </ng-template>

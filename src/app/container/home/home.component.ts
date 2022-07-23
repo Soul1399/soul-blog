@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit {
     this.gridConfig.rowsArea.maxWidth = '40vw';
     this.gridConfig.rowsArea.overflow = 'auto';
     this.gridConfig.rowGap = 5;
+    this.gridConfig.cssRenderMode = 'grid';
 
     this.initGridCells();
 

@@ -18,6 +18,7 @@ export class StaticGridConfiguration {
     };
     getDataUniqueKey?: (data: any) => string;
     forceRedrawOnChange: boolean = false;
+    cssRenderMode?: 'flex' | 'grid' = 'flex';
     
     constructor() {
         this.commands = {
