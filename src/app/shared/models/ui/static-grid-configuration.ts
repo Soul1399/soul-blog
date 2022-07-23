@@ -14,7 +14,7 @@ export class StaticGridConfiguration {
     getRowHeight?: (data: any) => string;
     rowSort?: (a: any, b: any) => number;
     rowsArea: StaticGridRowsArea = {
-        minHeight: '0', overflow: null, maxHeight: null, maxWidth: '500px'
+        minHeight: '0', overflow: null, maxHeight: null, minWidth: '50px', maxWidth: '500px'
     };
     getDataUniqueKey?: (data: any) => string;
     forceRedrawOnChange: boolean = false;
@@ -38,6 +38,7 @@ export class StaticGridConfiguration {
                 overflow: this.rowsArea.overflow,
                 minHeight: this.rowsArea.minHeight,
                 maxHeight: this.rowsArea.maxHeight,
+                minWidth: this.rowsArea.minWidth,
                 maxWidth: this.rowsArea.maxWidth
             });
         }

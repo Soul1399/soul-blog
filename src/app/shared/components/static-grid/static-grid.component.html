@@ -1,7 +1,7 @@
 
 <div #rowsArea class="static-grid-area">
     <div class="head-container">
-        <div class="static-grid-head-area">
+        <div *ngIf="showHeadOfGrid" class="static-grid-head-area">
             <ng-container *ngIf="headTemplate?.outlet == null">
                 <!-- title / add button -->
                 <span *ngIf="headTitle?.trim()">{{ headTitle }}</span>

@@ -34,6 +34,7 @@
   .static-grid-headers-area {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
     
     .static-grid-header {
       min-height: 20px;

@@ -41,7 +41,8 @@ export class HomeComponent implements OnInit {
     this.gridConfig.forceRedrawOnChange = true;
     this.gridConfig.rowsArea.minHeight = '20px';
     this.gridConfig.rowsArea.maxHeight = '500px';
-    this.gridConfig.rowsArea.maxWidth = '500px';
+    this.gridConfig.rowsArea.minWidth = null;
+    this.gridConfig.rowsArea.maxWidth = '40vw';
     this.gridConfig.rowsArea.overflow = 'auto';
     this.gridConfig.rowGap = 5;
 
