@@ -18,7 +18,7 @@ import { StaticGridConfiguration } from '../../models/ui/static-grid-configurati
 import { StaticGridRowContext } from '../../models/ui/static-grid-row-context';
 import { defineEmptyCell, getCellContextValues, StaticGridCellContext } from '../../models/ui/static-grid-cell-context';
 import { StaticGridCellType } from '../../models/ui/static-grid-cell-type';
-import { fromEvent, Observable, of, Subscription, first, map, BehaviorSubject } from 'rxjs';
+import { fromEvent, Observable, of, Subscription, first, map, BehaviorSubject, defaultIfEmpty } from 'rxjs';
 import { StaticGridEditMode } from '../../models/ui/static-grid-edit-mode';
 import { SelectItem } from '../../models/ui/select-item';
 import { StaticGridTemplate } from '../../models/ui/static-grid-template';
@@ -43,20 +43,29 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
   })
   configuration = new StaticGridConfiguration();
   @Input()
+  showHeadOfGrid: boolean = false;
+  @Input()
   headTemplate: StaticGridTemplate = { outlet: null, outletContext: null, type: 'header' };
   @Input()
   footerTemplate: StaticGridTemplate = { outlet: null, outletContext: null, type: 'footer' };
   @Input()
   @OnChange<StaticGridHeader[] | null>(function(this: StaticGridComponent, headers, change) {
+    if (_.isArray(change.currentValue) && _.isArray(change.previousValue) &&
+      change.currentValue.length == change.previousValue.length &&
+      _.intersection(change.currentValue, change.previousValue).length == change.currentValue.length) {
+        return;
+    }
     this.headersHaveChanged(headers);
   })
   headers?: StaticGridHeader[] | null = null;
   @Input()
-  cellsOfRow?: StaticGridCellOfRow[] | null = null;
+  cellsOfRow?: ((row: StaticGridRowContext) => StaticGridCellOfRow[]) | null = null;
   @Input()
   rowData: any[] | null = [];
   @Output()
   lostFocus = new EventEmitter<StaticGridCellContext | null>();
+  @Output()
+  editingCellLostFocus = new EventEmitter<StaticGridCellContext | null>();
 
   lastRenderedRows: StaticGridRowContext[] | null = null;
   currentEditingCell$ = new BehaviorSubject<StaticGridCellContext | null>(null);
@@ -72,14 +81,18 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mouseupSubscribe = fromEvent(document, 'mouseup').subscribe((x: Event) => {
       const ev = x as MouseEvent;
       const target = ev.target as HTMLElement;
-      // if (this.currentEditingCell && this.currentEditingCell.elementId) {
-      //   const cell = document.querySelector(`#${this.currentEditingCell.elementId}`);
-      //   const target = ev.target as HTMLElement;
-      //   if (target != cell && target.closest(`#${this.currentEditingCell.elementId}`) == null) this.stopEdit();
-      // }
+      const editingCell = this.currentEditingCell$.getValue();
       if (this.rowsAreaRef && this.rowsAreaRef.nativeElement) {
         if (target != this.rowsAreaRef.nativeElement && target.closest(`.${this.rowsAreaRef.nativeElement.classList[0]}`) == null) {
           this.lostFocus.emit(this.currentEditingCell$.value);
+          return;
+        }
+      }
+      if (editingCell && editingCell.elementId) {
+        const cell = document.querySelector(`#${editingCell.elementId}`);
+        const target = ev.target as HTMLElement;
+        if (target != cell && target.closest(`#${editingCell.elementId}`) == null) {
+          this.editingCellLostFocus.emit(editingCell);
         }
       }
     });
@@ -155,7 +168,7 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
     if (row == null) return [];
     const config = this.configuration;
     const cells: StaticGridCellContext[] = [];
-    this.buildCellsFromHeaders(row, config, cells);
+    this.buildCellsFromHeaders(row, cells);
 
     // apply cell gap to all except last
     _.initial(cells).forEach((c) => {
@@ -172,68 +185,77 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
 
   buildCellsFromHeaders(
     row: StaticGridRowContext,
-    config: StaticGridConfiguration,
     cells: StaticGridCellContext[]
   ) {
-    if (
+    let order: number = 0;
+    let cellsOfRow: StaticGridCellOfRow[];
+    if (_.isFunction(this.cellsOfRow) && (cellsOfRow = this.cellsOfRow(row))?.length > 0) {
+      for (const cellOfRow of cellsOfRow) {
+        order++;
+        const cell = this.createCellContext(row, cellOfRow, null, order);
+        cells.push(cell);
+      }
+    }
+    else if (
       _.isArray(this.headers) &&
       !this.headers.some((h) => !h.relatedCells || !h.relatedCells.length)
     ) {
-      let order: number = 0;
       for (const header of this.headers) {
         if (_.isArray(header.relatedCells) && header.relatedCells.length > 0) {
           const columnsWidth = header.width ? Math.round(header.width / header.relatedCells.length) : null;
           for (const cellOfRow of header.relatedCells) {
-            const values = getCellContextValues(row, cellOfRow);
             order++;
-            const cell: StaticGridCellContext = {
-              row: row,
-              settings: cellOfRow,
-              value: values.value,
-              displayedValue: values.displayedValue,
-              editedValue: values.editedValue,
-              width: `${cellOfRow.width || columnsWidth || config.cellWidth}px`,
-              spaceAfter: '0',
-              enabled:
-                (header.enabled ?? true) &&
-                (_.isFunction(cellOfRow.enabled)
-                  ? cellOfRow.enabled(row)
-                  : (cellOfRow.enabled ?? true)),
-              visible:
-                (header.visible ?? true) &&
-                (_.isFunction(cellOfRow.visible)
-                  ? cellOfRow.visible(row)
-                  : (cellOfRow.visible ?? true)),
-              order: order,
-              elementId: `static_grid_cell_${order}_${row.position}`,
-              isDirectEdit:
-                (cellOfRow.cellEditMode ?? StaticGridEditMode.direct) ==
-                StaticGridEditMode.direct,
-              isEditing: false,
-              isEditable: !!cellOfRow.cellType && cellOfRow.cellType != StaticGridCellType.label,
-              cssClass: _.isFunction(cellOfRow.cssClass)
-                ? cellOfRow.cssClass(row)
-                : cellOfRow.cssClass?.slice() ?? [],
-              cssStyle: typeof cellOfRow.placeItem === 'string' ? { display: 'grid', 'place-items': cellOfRow.placeItem } : {},
-              params: _.clone(cellOfRow.params)
-            };
-            defineEmptyCell(cell);
-
-            const relatedValues = _.isFunction(cellOfRow.relatedValues)
-              ? cellOfRow.relatedValues(row)
-              : _.isArray(cellOfRow.relatedValues)
-              ? cellOfRow.relatedValues.slice()
-              : [];
-            cell.relatedValues =
-              relatedValues instanceof Observable
-                ? relatedValues
-                : of(relatedValues);
-            
+            const cell = this.createCellContext(row, cellOfRow, columnsWidth, order, header);
             cells.push(cell);
           }
         }
       }
     }
+  }
+
+  createCellContext(row: StaticGridRowContext, cellOfRow: StaticGridCellOfRow, columnsWidth: number | null, order: number, header?: StaticGridHeader) : StaticGridCellContext {
+    const values = getCellContextValues(row, cellOfRow);
+    const cell: StaticGridCellContext = {
+      row: row,
+      settings: cellOfRow,
+      value: values.value,
+      displayedValue: values.displayedValue,
+      editedValue: values.editedValue,
+      width: `${cellOfRow.width || columnsWidth || this.configuration.cellWidth}px`,
+      spaceAfter: '0',
+      enabled: (header?.enabled ?? true) &&
+        (_.isFunction(cellOfRow.enabled)
+          ? cellOfRow.enabled(row)
+          : (cellOfRow.enabled ?? true)),
+      visible: (header?.visible ?? true) &&
+        (_.isFunction(cellOfRow.visible)
+          ? cellOfRow.visible(row)
+          : (cellOfRow.visible ?? true)),
+      order: order,
+      elementId: `static_grid_cell_${order}_${row.position}`,
+      isDirectEdit: (cellOfRow.cellEditMode ?? StaticGridEditMode.direct) ==
+        StaticGridEditMode.direct,
+      isEditing: false,
+      isEditable: !!cellOfRow.cellType && cellOfRow.cellType != StaticGridCellType.label,
+      cssClass: _.isFunction(cellOfRow.cssClass)
+        ? cellOfRow.cssClass(row)
+        : cellOfRow.cssClass?.slice() ?? [],
+      cssStyle: typeof cellOfRow.placeItem === 'string' ? { display: 'grid', 'place-items': cellOfRow.placeItem } : {},
+      params: _.clone(cellOfRow.params)
+    };
+    defineEmptyCell(cell);
+
+    const relatedValues = _.isFunction(cellOfRow.relatedValues)
+      ? cellOfRow.relatedValues(row)
+      : _.isArray(cellOfRow.relatedValues)
+        ? cellOfRow.relatedValues.slice()
+        : [];
+    cell.relatedValues =
+      relatedValues instanceof Observable
+        ? relatedValues
+        : of(relatedValues);
+
+    return cell;
   }
 
   startEditCell(ev: MouseEvent, cell: StaticGridCellContext) {
@@ -281,6 +303,10 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
       this.setValueFromInput(row, cell, newValue).pipe(first()).subscribe(c => this.validateCell(cell));
     }
     else if (cell.settings.cellType == StaticGridCellType.select) {
+      const item = newValue as SelectItem;
+      this.setValueFromInput(row, cell, item.code).pipe(first()).subscribe(c => this.validateCell(cell));
+    }
+    else if (cell.settings.cellType == StaticGridCellType.autocomplete) {
       const item = newValue as SelectItem;
       this.setValueFromInput(row, cell, item.code).pipe(first()).subscribe(c => this.validateCell(cell));
     }
@@ -378,7 +404,21 @@ export class StaticGridComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   headersHaveChanged(headers: StaticGridHeader[] | null) {
+    this.adjustHeadersWidths();
     this.reloadRows();
+  }
+
+  adjustHeadersWidths() {
+    if (_.isArray(this.headers)) {
+      this.headers.forEach(hd => {
+        if (_.isArray(hd.relatedCells) && hd.relatedCells.length > 0) {
+          const totalWidth = hd.relatedCells.reduce((x, y) => x + (y.width ?? 0), 0);
+          if (hd.width == null || hd.width < totalWidth) {
+            hd.width = totalWidth;
+          }
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

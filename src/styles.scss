@@ -1,31 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
-@use 'styles/theme';
-@use 'styles/material';
-@use 'styles/variables';
-@use 'styles/flex';
-@use 'styles/grid';
+@use "styles/theme";
+@use "styles/material";
+@use "styles/variables";
+@use "styles/flex";
+@use "styles/grid";
 
-html, body { @extend .h-100; }
+html,
 body {
-    margin: 0;
+  @extend .h-100;
+}
+body {
+  margin: 0;
 
-    .grid-input {
-        input {
-            background-color: transparent;
-            color: white;
-            padding: 0 0.5ch;
-            border-style: solid;
-            border-width: 1px;
-            height: 80%;
-        }
+  .grid-input {
+    input {
+      background-color: transparent;
+      color: white;
+      padding: 0 0.5ch;
+      border-style: solid;
+      border-width: 1px;
+      height: 80%;
+    }
+  }
+
+  .grid-input-mat-autocomplete.mat-autocomplete-panel {
+    background-color: lightcoral;
+    .mat-option-text {
+      @extend .default-font;
     }
 
-    .grid-select {
-        select {
-            background-color: transparent;
-            color: white;
-            height: 80%;
-            min-width: 10ch;
-        }
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 8px;
     }
+    &::-webkit-scrollbar-track {
+      background-color: lightgrey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #000;
+    }
+  }
+
+  .grid-select {
+    select {
+      background-color: transparent;
+      color: white;
+      height: 80%;
+      min-width: 10ch;
+    }
+  }
 }

@@ -1,7 +1,7 @@
 
 <div #rowsArea class="static-grid-area">
     <div class="head-container">
-        <div class="static-grid-head-area">
+        <div *ngIf="showHeadOfGrid" class="static-grid-head-area">
             <ng-container *ngIf="headTemplate?.outlet == null">
                 <!-- title / add button -->
                 <span *ngIf="headTitle?.trim()">{{ headTitle }}</span>
@@ -80,7 +80,7 @@
             <app-static-grid-cell-input *ngSwitchCase="cellTypeEnum.input"
                 [htmlId]="cell.settings.cellType + '_' + cell.elementId"
                 [allowChange]="cell.enabled"
-                [value]="cell.displayedValue"
+                [value]="cell.displayedValue || cell.value"
                 [rawValue]="cell.value"
                 [parser]="cell.settings.formatter?.parse"
                 [formatter]="cell.settings.formatter?.format"
@@ -94,6 +94,10 @@
                 [textValue]="cell.displayedValue"
                 [rawValue]="cell.value"
                 [availableOptions$]="cell.relatedValues"
+                [filterDelay]="cell.params.filterDelay"
+                [dropzoneCssClass]="cell.params.dropzoneCssClass"
+                [panelWidth]="cell.params.panelWidth"
+                [textValue]="cell.displayedValue || cell.value"
                 (selectionChanged)="onCellValueChanging(row, cell, $event)"></app-static-grid-cell-autocomplete>
 
         </ng-container>
