@@ -1,0 +1,17 @@
+// build percentages
+$pc: '%';
+@mixin percent-for($prop, $alias) {
+    @for $i from 1 through 100 {
+        .#{$alias}-#{$i} {
+            #{$prop}: #{$i}#{$pc};
+        }
+    }
+}
+
+@mixin small-font($color) {
+    .small-font-#{$color} {
+        font-family: Monaco;
+        font-size: small;
+        color: $color;
+    }
+}

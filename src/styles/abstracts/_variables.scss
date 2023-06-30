@@ -1,13 +1,17 @@
+@use 'mixins' as m;
 
-$pc: '%';
+$props:
+    ("p": width, "a": wp), 
+    ("p": height, "a": hp);
+
+@each $p in $props {
+    @include m.percent-for(map-get($p, "p"), map-get($p, "a"));
+    @include m.percent-for('min-' + map-get($p, "p"), 'min-' + map-get($p, "a"));
+    @include m.percent-for('max-' + map-get($p, "p"), 'max-' + map-get($p, "a"));
+}
+
 $units: pc, ch, em, rem, pt, vw, vh, cm, mm, in;
 @for $i from 0 through 100 {
-    .w-#{$i} {
-        width: #{$i}#{$pc};
-    }
-    .h-#{$i} {
-        height: #{$i}#{$pc};
-    }
     .vww-#{$i} {
         width: #{$i}vw;
     }
@@ -35,10 +39,15 @@ $units: pc, ch, em, rem, pt, vw, vh, cm, mm, in;
     }
 }
 
+.w-0 {
+    width: 0;
+}
 .w-auto {
     width: auto;
 }
-
+.h-0 {
+    height: 0;
+}
 .h-auto {
     height: auto;
 }
