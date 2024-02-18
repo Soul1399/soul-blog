@@ -1,18 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-@use "styles/theme";
-@use "styles/material";
+@use "styles/vendors/bootstrap" as b;
+@use "styles/themes/theme";
+@use "styles/vendors/material";
 @use "styles/abstracts/variables" as *;
 @use "styles/abstracts/mixins" as m;
-@use "styles/flex" as *;
-@use "styles/grid" as *;
+@use "styles/layout/flex" as *;
+@use "styles/layout/grid" as *;
 
-html,
-body {
-  @extend .hp-100;
+html {
+  @extend .h-100;
 }
 body {
-
-  margin: 0;
+  @extend .hp-100, .m-0;
 
   .grid-input {
     input {
@@ -52,7 +51,6 @@ body {
     }
   }
 
-  @include m.small-font(white);
 }
 
 

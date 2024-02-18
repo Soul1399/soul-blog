@@ -8,10 +8,27 @@ $pc: '%';
     }
 }
 
-@mixin small-font($color) {
-    .small-font-#{$color} {
-        font-family: Monaco;
-        font-size: small;
-        color: $color;
+@mixin h-flex($wrap: '', $stretch: '') {
+    display: flex;
+    @if $stretch != '' {
+        align-items: stretch;
+    } @else {
+        align-items: center;
+    }
+    @if $wrap != '' {
+        flex-wrap: wrap;
+    } @else {
+        flex-wrap: nowrap;
+    }
+    align-items: center;
+    justify-content: flex-start;
+}
+
+@mixin autozero-for($prop, $alias) {
+    .#{$alias}-auto {
+        #{$prop}: auto;
+    }
+    .#{$alias}-0 {
+        #{$prop}: 0;
     }
 }

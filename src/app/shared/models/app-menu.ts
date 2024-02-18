@@ -1,8 +1,11 @@
 import { DEFAULT_LANGUAGE } from "../store/app-state";
 import { RefPages } from "./ui/ref-pages";
+import { immerable } from "immer"
 
 
 export class AppMenu {
+    [immerable] = true
+
     links: AppMenuLink[]
     constructor() {
         this.links = [];

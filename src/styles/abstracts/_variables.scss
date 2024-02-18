@@ -1,17 +1,23 @@
 @use 'mixins' as m;
 
 $props:
-    ("p": width, "a": wp), 
-    ("p": height, "a": hp);
+    ("name": width, "percent-alias": wp, "alias": w), 
+    ("name": height, "percent-alias": hp, "alias": h),
+    ("name": padding, "percent-alias": pp, "alias": p),
+    ("name": margin, "percent-alias": mp, "alias": m);
 
 @each $p in $props {
-    @include m.percent-for(map-get($p, "p"), map-get($p, "a"));
-    @include m.percent-for('min-' + map-get($p, "p"), 'min-' + map-get($p, "a"));
-    @include m.percent-for('max-' + map-get($p, "p"), 'max-' + map-get($p, "a"));
+    $name: map-get($p, "name");
+    @include m.percent-for($name, map-get($p, "percent-alias"));
+    @include m.autozero-for($name, map-get($p, "alias"));
+    @if $name == width or $name == height {
+        @include m.percent-for('min-' + $name, 'min-' + map-get($p, "percent-alias"));
+        @include m.percent-for('max-' + $name, 'max-' + map-get($p, "percent-alias"));
+    }
 }
 
 $units: pc, ch, em, rem, pt, vw, vh, cm, mm, in;
-@for $i from 0 through 100 {
+@for $i from 1 through 100 {
     .vww-#{$i} {
         width: #{$i}vw;
     }
@@ -39,15 +45,3 @@ $units: pc, ch, em, rem, pt, vw, vh, cm, mm, in;
     }
 }
 
-.w-0 {
-    width: 0;
-}
-.w-auto {
-    width: auto;
-}
-.h-0 {
-    height: 0;
-}
-.h-auto {
-    height: auto;
-}

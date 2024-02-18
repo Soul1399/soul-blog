@@ -1,4 +1,4 @@
-@use '/src/styles/flex';
+@use '/src/styles/layout/flex';
 
 :host {
     @extend .flex, .v-flex-align-middle;
