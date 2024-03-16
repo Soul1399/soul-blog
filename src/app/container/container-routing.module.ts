@@ -7,8 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: AppContainerComponent,
+    pathMatch: 'full',
     children: [
-      { path: '', redirectTo: 'home' },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent }
     ]
   }

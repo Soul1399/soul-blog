@@ -27,7 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       pageContext: pageContextReducer,
       theme: themeReducer,
       menu: menuReducer
-    }),
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

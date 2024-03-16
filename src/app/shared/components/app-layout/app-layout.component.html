@@ -1,10 +1,10 @@
 <main role="main" [ngClass]="(themeColorsCss$ | async) || []">
   <ng-container
-    *ngIf="pageContext$ | async as page"
+    *ngrxLet="{ page: pageContext$, theme: theme$ } as x"
     [ngTemplateOutlet]="mainContent"
     [ngTemplateOutletContext]="{
-      page,
-      theme: theme$ | async
+      page: x.page,
+      theme: x.theme
     }"
   ></ng-container>
 </main>

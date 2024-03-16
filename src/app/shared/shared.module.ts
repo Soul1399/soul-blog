@@ -18,6 +18,7 @@ import { StaticGridRowFilterPipe } from './pipes/static-grid-row-filter.pipe';
 import { StaticGridCellSelectComponent } from './components/static-grid/static-grid-cell-select/static-grid-cell-select.component';
 import { StaticGridCellInputComponent } from './components/static-grid/static-grid-cell-input/static-grid-cell-input.component';
 import { StaticGridCellAutocompleteComponent } from './components/static-grid/static-grid-cell-autocomplete/static-grid-cell-autocomplete.component';
+import { LetDirective } from '@ngrx/component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { StaticGridCellAutocompleteComponent } from './components/static-grid/st
     MatSidenavModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    LetDirective
   ],
   exports: [
     RouterModule,
@@ -53,6 +55,8 @@ import { StaticGridCellAutocompleteComponent } from './components/static-grid/st
     MatButtonToggleModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
+    
+    LetDirective,
 
     // components
     BaseComponent,

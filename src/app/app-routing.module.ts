@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: '', component: DefaultComponent },
   {
     path: 'blog',
+    pathMatch: 'full',
     loadChildren: () => import('./container/container.module').then(m => m.ContainerModule),
     resolve: { context: PageService }
   }
