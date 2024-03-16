@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AppPageContext } from '../models/app-page-context';
 import { AppPageNames } from '../models/app-page-names';
 import { HOME_PAGE, RefPages } from '../models/ui/ref-pages';
@@ -8,7 +8,7 @@ import { HOME_PAGE, RefPages } from '../models/ui/ref-pages';
 @Injectable({
   providedIn: 'root'
 })
-export class PageService implements Resolve<AppPageContext> {
+export class PageService  {
 
   constructor() { }
 
