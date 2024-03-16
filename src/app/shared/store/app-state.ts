@@ -1,8 +1,6 @@
-import { nameof } from "ts-simple-nameof";
 import { AppMenu } from "../models/app-menu";
 import { AppPageContext } from "../models/app-page-context";
 import { AppTheme } from "../models/app-theme";
-import { IEntity } from "../models/ientity";
 
 export const POIRET_FONT = 'Poiret One';
 export const GRUPPO_FONT = 'Gruppo';
