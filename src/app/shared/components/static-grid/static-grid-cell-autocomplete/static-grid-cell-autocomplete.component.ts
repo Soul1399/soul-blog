@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatAutocomplete } from '@angular/material/autocomplete';
-import { MatOptionSelectionChange } from '@angular/material/core';
+import { MatLegacyAutocomplete as MatAutocomplete } from '@angular/material/legacy-autocomplete';
+import { MatLegacyOptionSelectionChange as MatOptionSelectionChange } from '@angular/material/legacy-core';
 import * as _ from 'lodash';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import {
